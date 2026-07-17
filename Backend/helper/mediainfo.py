@@ -24,7 +24,11 @@ async def get_media_quality(message=None):
         path = "Mediainfo/"
         if not await aiopath.isdir(path):
             await mkdir(path)
-        des_path = ospath.join(path, media.file_name)
+        if not media.file_name:
+            file_ext = ".mp4" if message.video else ".dat"
+            des_path = ospath.join(path, f"{media.file_unique_id}{file_ext}")
+        else:
+            des_path = ospath.join(path, media.file_name)
 
         async for chunk in StreamBot.stream_media(message, limit=1):
 
